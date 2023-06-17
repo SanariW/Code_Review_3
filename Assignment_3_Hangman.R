@@ -12,6 +12,10 @@
 #' 2) The script for this game has been written to repeat the game until the user
 #' decides to no longer play. As such, after each iteration of the game please 
 #' select if you would like to play again or not (this then quits the script).
+#' As such, the user can play as many rounds as they want. At the end of each round
+#' they have the decision to exit the game and the script executes. As such, there
+#' is no infinite loop that is not exitable. There is by design an infinite number
+#' of loops (the user COULD play the game infinitely many times if they want...).
 #' 3) This game is not case-sensitive. Words and guesses will be valid no matter
 #' if they are lower or uppercase. 
 #' 4) The user has 10 guesses per round (one round = guessing one word). They
@@ -38,6 +42,8 @@ source("Helper_Functions.R")
 #' Later on, it is called after each round in the while() loop on LINE XXXXX until
 #' the user decides to stop playing. 
 start.game <- function(){
+  
+
   
   # BEGINNING OF SECTION A: Data loading & random word choosing.
   
@@ -196,26 +202,47 @@ start.game <- function(){
       cat("You have guessed the word: ", valid.guess, " - ","Unfortunately, that is incorrect!\n",
           "You have ", guess.cap-guess.counter, " guesses remaining!\n",
           "Your current progress:", visual, "\n", sep="")
-      
-      #' The else block below is run if the user's guess is not the perfect match 
-      #' OR if the 
-    #} else { CHECK IF CAN REPLACE WITH IF
     } 
+    
     #' The if block below is run if the guess was a single character. The two
     #' if statements previously were for word guesses, whereas the logic in 
-    #' this section will be for single character guesses.
+    #' this section will be for single character guesses. No stricter validation
+    #' of the guess is required because our helper function in the valid.guess
+    #' variable assignment already did this. The if statement below is just used
+    #' to dictate what to do next in the game. 
     if(nchar(valid.guess) == 1){
     
-    # Else if it was not word guess --> do character loop checks
     # CHECKING EACH CHARACTER OF GUESS WORD TO SEE IF ITS A MATCH
     
-      for(i in 1:length(split_word)){
+      #' This for loop iterates over the vector of numbers ranging from 1 to
+      #' the length of the mystery word. For example if the mystery word is
+      #' 'house', the for loop will run through the vector (1,2,3,4,5) as
+      #' the length of 'house' is 5 characters. In this case i will be 
+      #' assigned to each of the numbers in this character vector. We will
+      #' use i to access the ith element in the vector 'split_word'. This
+      #' vector houses the individual characters of our mystery word.
+      for(i in 1:word.length){
         
-        # if guess character is in word
+        #' Here we are checking if the single letter guess 'valid.guess'
+        #' is equal to the value of the letter at the ith position in the
+        #' 'split_word' vector which consists of all letters in our mystery word.
+        #' As such, we loop over each character to see if there is a match.
+        #' Helper function string.upper() is used again to make the equivalence 
+        #' check easier (case insensitive).
         if(string.upper(valid.guess) == string.upper(split_word[i])){
           
+          #' If there is a match of the guessed letter with the ith position of
+          #' our 'split_word' vector, we updated our visual progress tracker 'visual'
+          #' at the respective position (i). For example, if the user guesses 'e'
+          #' and there is an 'e' at the 2nd and 3rd position of the word visual will
+          #' update to show the character 'e' at thos positions instead of an underscore.
           visual[i] <- string.upper(valid.guess)
           
+          #' Similarly, if there is a match of the guessed letter at the ith
+          #' position of the mystery word, we print this success to the console.
+          #' The user can see what letter they guessed, that there was a match,
+          #' how many guesses they have left, and what their current progress is
+          #' respective to the 'visual' progress indicator (underscores and characters).
           cat("Success! ", string.upper(valid.guess), " is in the word!\n",
               "You have ", guess.cap-guess.counter, " guesses remaining.\n",
               "Your current progress: ", visual, "\n", sep="")
@@ -224,51 +251,77 @@ start.game <- function(){
       # once the for loop has run, if there was no successes -> 
       #check if guessed character is in the vector of chars from word
       # if it is not, inform the user
+      
+      #' Once all the characters have been looped through for the mystery word
+      #' (in split_word vector), if the user's letter guess is not in the target
+      #' vector of letters from the mystery word, print a failed guess alert to user.
+      #' In this case, we will print their guess, the finding that this letter
+      #' is not in the word, the number of guesses they have left (guess cap minus
+      #' guess counter) and their current progress stored in 'visual'.
       if(!(string.upper(valid.guess) %in% split_word)){
-        cat(valid.guess, " is not in the word. Try again!\n",
+        cat(valid.guess, " is not in the word!\n",
             "You have ", guess.cap-guess.counter, " guesses remaining\n",
             "Your current status:", visual, "\n", sep="")
       }
     }
     
-  } # end of guess count checker while loop
+  } # This is the end of the while loop which checks that the user can still guess. 
   
-  # If while loop is over, no more tries left
-  # if out of guesses & final guess was not the last needed letter:
-  if(guess.counter == guess.cap & paste(visual, collapse = "") != guess.word){
+  #' BEGINNING OF SECTION D: User can no longer guess. Either because they
+  #' or out of attempts OR because they have guessed the correct word. 
+  
+  #' If the user has reached the maximum number of guesses and they have not
+  #' yet fully guessed the word (concatenation of visual is not equal to the
+  #' mystery word) then inform the user the game is over and they are
+  #' out of guesses. Reveal the secret word to the user.
+  #' Note: if the user guessed the last letter / or the right word on their
+  #' last attempt this will not run as the concatenation of visual will match
+  #' the mystery word. As such, this should not run as the user managed a last
+  #' guess miracle to guess the word!
+  #' Note: helper function string.upper() is used to ensure consistent equivalence
+  #' checks of the words and characters. 
+  
+  if(guess.counter == guess.cap & paste(string.upper(visual), collapse = "") != string.upper(guess.word)){
     cat("You are out of guesses.. GAME OVER!\n",
         "The secret word was: ", guess.word, sep="")
   }
-  # if the user got it: 
-  if(paste(visual, collapse = "") == guess.word){
-    print("Congrats! You guessed the word!")
+  
+  #' If the concatenation of the visual progress characters (letters that replace
+  #' default underscores if guessed correctly) equals the target mystery word,
+  #' the user has won! As such, print a success message and show them what
+  #' the mystery word was. 
+  #' Note: helper function string.upper() is used to ensure consistent equivalence
+  #' checks of the words and characters. 
+  if(paste(string.upper(visual), collapse = "") == string.upper(guess.word)){
+    cat("Congrats! You guessed the word! The word was: ", guess.word, sep="")
   }
   
+  #' Below is a condition check at the end of each round: 
+  #' See if the user wants to play again by calling helper function check.play.again()
+  #' If the user decides not to play again use a super assignment on variable quit.game
+  #' Make this boolean TRUE which will break the while() loop to run successive rounds.
   
-  
-  # Below is a condition check at the end of each round: see if the user wants to play again by calling
-  # helper function check.play.again()
   if(check.play.again() == FALSE){
     quit.game <<- TRUE 
-    # This above is used to make a superassignment. Makes global variable quit.game TRUE
   }
   
-} # END OF START GAME FUNC
+} # This is the end of my start.game() function which is the core logic for the game.
 
 
 #' BELOW IS THE MAIN ENGINE OF MY GAME:
-#' FIRST IT CALLS STAR.GAME ONCE TO EXECUTE THE GAME FUNCTION
-#' THEN IT HAS A WHILE LOOP TO CHECK IF USER WANTS TO PLAY AGAIN.
-#' GAME EXECUTES UNTIL USER TYPES "NO" or "N".
+#' First it calls start.game() function once to execute the game for the first time.
+#' Then it has a while() loop running which checks the condition of variable quit.game.
+#' After each round, the user can decide to play again or exit the hangman game.
+#' If the user types "NO" or "N" after a round the while loop condition is not me
+#' and hence breaks the loop. No more calls to start.game() are made. 
 
 start.game()
 while(quit.game != TRUE){
   start.game()
 }
-print("Thanks for playing!")
+cat("Thanks for playing!")
 
 
 # TO DO
-# Fix comments here
 # Fix helper function comments
 # AFTER EACH GUESS / WHEN TRYING SAME GUESS AGAIN SHOW ALREADY GUESSED VECTOR already.guessed
