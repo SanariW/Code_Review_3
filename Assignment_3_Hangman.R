@@ -18,6 +18,8 @@
 #' can either guess a single letter OR a word of the same length as the mystery
 #' word.
 #' 5) Duplicate guesses are not allowed. Each guess must be unique (per round).
+#' 6) If letters are repeated in the word, both will be revealed. This only
+#' counts as one guess (oh yeah)!
 
 # BEGINNING OF HANGMAN SCRIPT BELOW
 
@@ -93,8 +95,10 @@ start.game <- function(){
               "3. You may either guess one letter per attempt OR guess the whole word at once!\n",
               "4. If you guess the whole word at once, it must be of the same length as the mystery word.\n",
               "5. Be careful! If you try to guess the whole word at once", 
-              "you will only win if it's a perfect match! No information will",
-              "be provided about any letter overlap between the two words!!")
+              "you will only win if it's a perfect match!\n", 
+              "No information will be provided about any letter overlap between the two words!!\n",
+              "6. If letters are repeated in the mystery word, both will be revealed.",
+              "This only counts as one guess (oh yeah)!")
   
   #' We have added an extra function to this game. Once the rules of the game are
   #' printed (above), the user is prompted to begin the round. They must answer with
@@ -130,28 +134,77 @@ start.game <- function(){
   # BEGINNING OF SECTION C: User guessing & guess validation
   
   # While loop while guessing is allowed - under guess cap and visual != word:
+  
+  #' The while() loop below acts as a checker for the game to ensure the player
+  #' is still allowed to guess. The players is still allowed to guess if:
+  #' (a) their number of guesses 'guess.counter' is less than the maximum number
+  #' of guesses which is 10 'guess.cap'.
+  #' (b) the concatenation of guessed characters or words does not equal the
+  #' target mystery word. This is the second part of the AND statement below.
+  #' In this we are combining the 'visual' progress of the player and equating
+  #' it to the guess word to check if it's the same or not. 
   while(guess.counter < guess.cap & paste(visual, collapse = "") != guess.word){
+    
+    #' If the user is still allowed to guess, we are prompting them to make a guess.
+    #' This user input prompt is located within helper function guess.validator().
+    #' Once the user input is received, it is validated to ensure it is a valid guess.
+    #' The helper function guess.validator() takes in two arguments: one is
+    #' the word length of our mystery word, and the second is the vector of guesses
+    #' the user has already made.
+    #' For details on how the user guess is validated, please refer to the helper function.
+    #' The user's guess will only be assigned to 'valid.guess' if it passes the
+    #' validation of the helper function, which returns the guess and assigns
+    #' it to this variable.
     valid.guess <- guess.validator(word.length, already.guessed)
     
-    #adding valid guess to end of vector of guesses. Repository to not guess again -- update notes in helper func
+    #' If the guess is valid and has been assigned to 'valid.guess' we will append (add)
+    #' it to our vector of user guesses. This guess will now be prohibited in subsequent
+    #' guesses for this word. This check is also done in the helper function guess.validator().
     already.guessed <- append(already.guessed, valid.guess)
     
-    # For each valid guess, add one to our guess counter to keep track of the guess total
+    #' Similarly, if the guess is valid we also increase our 'guess.counter' by one
+    #' to keep track of the number of guesses the user has made for this word.
     guess.counter <- guess.counter + 1
     
     # FIRST CHECKING IF IT IS A WHOLE WORD GUESS - IF THE WHOLE WORD IS CORRECT
+    
+    #' Here we check if the user guessed the whole word (of the same length as mystery word).
+    #' This would be like a 'perfect match'. E.g. word is 'dog' and user guesses 'dog'.
+    #' If the uppercase of the guess is equal to the uppercase of the guess word, we
+    #' inform the user they have guessed the right word. We print what the word was.
+    #' Then we break the while loop (used for guessing rounds) as it is no 
+    #' longer needed. Helper function string.upper() is used again to make the 
+    #' comparison of strings easier (all caps).
+  
     if(string.upper(valid.guess) == string.upper(guess.word)){
       cat("SUCCESS! You have guessed the word correctly!\n",
           string.upper(guess.word), " was the word!")
       break
     }
     
-    # If it was a word guess (nchar same == for guess and word) but incorrect, print this:
+    #' If the user did guess a whole word (of same length as mystery word) but
+    #' the word they guessed was not the mystery word, we inform them that this
+    #' guess is incorrect. We print their guess to remind them what it was. We
+    #' also print the number of guesses they have left (guess.cap minus guess.counter).
+    #' Lastly, we also print the visual underscore progress cue to show them which
+    #' characters (if any) they have already guessed correctly. Helper function
+    #' string.upper() is used again to make string comparison easier.
+    #' Note: if a whole word is guessed no partial letter matches are returned. Whole
+    #' word guesses only work if they get the perfect match to the mystery word. 
+    
     if(nchar(valid.guess) == nchar(guess.word) & string.upper(valid.guess) != string.upper(guess.word)){
       cat("You have guessed the word: ", valid.guess, " - ","Unfortunately, that is incorrect!\n",
           "You have ", guess.cap-guess.counter, " guesses remaining!\n",
           "Your current progress:", visual, "\n", sep="")
-    } else {
+      
+      #' The else block below is run if the user's guess is not the perfect match 
+      #' OR if the 
+    #} else { CHECK IF CAN REPLACE WITH IF
+    } 
+    #' The if block below is run if the guess was a single character. The two
+    #' if statements previously were for word guesses, whereas the logic in 
+    #' this section will be for single character guesses.
+    if(nchar(valid.guess) == 1){
     
     # Else if it was not word guess --> do character loop checks
     # CHECKING EACH CHARACTER OF GUESS WORD TO SEE IF ITS A MATCH
