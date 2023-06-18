@@ -178,14 +178,14 @@ start.game <- function(){
     #' Here we check if the user guessed the whole word (of the same length as mystery word).
     #' This would be like a 'perfect match'. E.g. word is 'dog' and user guesses 'dog'.
     #' If the uppercase of the guess is equal to the uppercase of the guess word, we
-    #' inform the user they have guessed the right word. We print what the word was.
-    #' Then we break the while loop (used for guessing rounds) as it is no 
-    #' longer needed. Helper function string.upper() is used again to make the 
-    #' comparison of strings easier (all caps).
+    #' set the 'visual' progress bar equal to the word (will be used as a check later)
+    #' and we break out of the while loop (used for guessing rounds) as it is no longer 
+    #' needed. Helper function string.upper() is used again to make the comparison
+    #' of strings easier.
   
     if(string.upper(valid.guess) == string.upper(guess.word)){
-      cat("SUCCESS! You have guessed the word correctly!\n",
-          string.upper(guess.word), " was the word!")
+      
+      visual <- string.upper(guess.word)
       break
     }
     
