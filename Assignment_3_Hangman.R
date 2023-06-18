@@ -24,10 +24,13 @@
 #' 5) Duplicate guesses are not allowed. Each guess must be unique (per round).
 #' 6) If letters are repeated in the word, both will be revealed. This only
 #' counts as one guess (oh yeah)!
+#' 7) This game uses a text file with random words as the "database" of possible
+#' solutions. This file has 25 words on it. So if you play enough rounds there's 
+#' a chance a word will be repeated.
 
 # BEGINNING OF HANGMAN SCRIPT BELOW
 
-#' The Boolean below is a check for our while loop on line XXXX**!!!!!
+#' The Boolean below is a check for our while loop on line 153.
 #' This is required for the logic to check if the user wants to play another
 #' round or not. The user can play as many successive games as they would like.
 quit.game <- FALSE 
@@ -38,12 +41,10 @@ quit.game <- FALSE
 source("Helper_Functions.R") 
 
 #' The start.game() function below is the main function for our game. It is first
-#' called on Line XXXXX!!!!!!*** which loads the game for the first time. 
-#' Later on, it is called after each round in the while() loop on LINE XXXXX until
+#' called on Line 319 which loads the game for the first time. 
+#' Later on, it is called after each round in the while() loop on Line 320 until
 #' the user decides to stop playing. 
 start.game <- function(){
-  
-
   
   # BEGINNING OF SECTION A: Data loading & random word choosing.
   
@@ -319,9 +320,8 @@ start.game()
 while(quit.game != TRUE){
   start.game()
 }
-cat("Thanks for playing!")
 
+#' If while loop no longer executes, the user has chosen to stop playing.
+#' Print a thank you message to user for playing the game.
+cat("Thanks for playing!\n", "Terminating Game....\n", sep="")
 
-# TO DO
-# Fix helper function comments
-# AFTER EACH GUESS / WHEN TRYING SAME GUESS AGAIN SHOW ALREADY GUESSED VECTOR already.guessed
