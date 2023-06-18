@@ -1,4 +1,5 @@
 # Helper Functions for Hangman Game - Assignment 3
+# Must be used in conjunction with "Assignment_3_Hangman.R"
 
 # FUNCTION 1:
 # Text Capitalizer: Capitalizes all text in a string and returns the capitalized string.
