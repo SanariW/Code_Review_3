@@ -29,6 +29,8 @@ start_game_consent <- function(my_prompt){
     #' characters only. Reduces errors when doing checks of equivalence. 
     if(string.upper(answer) == "YES" | string.upper(answer) == "Y"){
       break
+    } else {
+      cat("Please enter YES or Y to start the game")
     }
   }
 } # End fo helper function 2
