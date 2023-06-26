@@ -325,3 +325,5 @@ while(quit.game != TRUE){
 #' Print a thank you message to user for playing the game.
 cat("Thanks for playing!\n", "Terminating Game....\n", sep="")
 
+
+# Comments: 
