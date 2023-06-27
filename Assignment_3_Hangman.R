@@ -1,6 +1,7 @@
 # Assignment 3: Hangman Game
 # SW: CODE REVIEW by Sanari Wickramaratne (SW)
-# SW: Code review comments tagged with SW in the beginning 
+# SW: Code review comments tagged with SW at the beginning of each line. 
+# SW: Code review comments are dispersed throughout this script under sections of code it is referring to. 
 
 #' To run this game, please follow these instructions:
 #' 1) Ensure that the working directory is set correctly to "Assignment_3_Hangman"
@@ -30,6 +31,9 @@
 #' solutions. This file has 25 words on it. So if you play enough rounds there's 
 #' a chance a word will be repeated.
 
+# SW: Very clear and detailed instructions for running this code as well as explaination of rules for the game. 
+# SW: I like how you made sure the game is not case-sensitive. 
+
 # BEGINNING OF HANGMAN SCRIPT BELOW
 
 #' The Boolean below is a check for our while loop on line 153.
@@ -41,6 +45,13 @@ quit.game <- FALSE
 #' are loaded into memory and accessible in this script. Please refer to that
 #' file for an overview of the different helper functions.
 source("Helper_Functions.R") 
+
+# SW: The descriptions of all of your helper functions were very clear and easy to follow along. 
+# SW: I like the use of toupper() to make each element upper case to account for upper and lower case input. 
+# SW: You could also use grepl, regex and [a-zA-z] to account for upper and lower case letter inputs. 
+# SW: For function 2 & 3, I like the prompt for users to start the game and play the game again. 
+# SW: The repeat loop as part of function 4 looks great in determining valid entries and 
+# SW: all of the different possibilities a user can input. 
 
 #' The start.game() function below is the main function for our game. It is first
 #' called on Line 319 which loads the game for the first time. 
@@ -54,7 +65,7 @@ start.game <- function(){
   #' There are 25 random words in this file that have been preloaded. 
   #' As there is no header & each word is on a separate line, header=F and sep="".
   my_data <- read.csv("word_list.txt", header=FALSE, sep="")
-  
+
   #' This gets the number of words (rows) in the data frame my_data. 
   #' Stored as my_data.length and to be used later.
   my_data.length <- nrow(my_data)
@@ -83,6 +94,18 @@ start.game <- function(){
   #' that they have not guessed yet. If they guess a correct letter, that letter
   #' will take the position of the respective underscore. 
   visual <- rep("_", word.length)
+
+  # SW: You could also use the readLines() to load your text file with your wordlist instead of using read.csv(). 
+  # SW: However, I understand why you used read.csv(). In order to simplify your code, this could have been an option. 
+  # SW: An alternative to retrieve the random word could be to use the tolower(sample()) to 
+  # SW: make the user input lower case and retrieve. 
+  # SW: I like how all of these operations were stored under the start.game function.  
+  # SW: It makes your code very organized and easy to follow along with! 
+  # SW: The use of rep() for the visual progress of game looks great! 
+  # SW: A minor suggestion would be to seperate your underscores with a space. 
+  # SW: It was a bit difficult to see how many underscores there were in total. 
+  # SW: I would suggest to include sep = " " in your function to achieve this. 
+  # SW: Overall, this section is very comprehensive, works perfectly, and includes all necessary elements!!  
   
   # BEGINNING OF SECTION B: Initiating the Game
   
@@ -108,7 +131,7 @@ start.game <- function(){
               "No information will be provided about any letter overlap between the two words!!\n",
               "6. If letters are repeated in the mystery word, both will be revealed.",
               "This only counts as one guess (oh yeah)!")
-  
+    
   #' We have added an extra function to this game. Once the rules of the game are
   #' printed (above), the user is prompted to begin the round. They must answer with
   #' 'YES' or 'Y' to begin the game. If they do not enter one of these inputs (upper
@@ -139,7 +162,10 @@ start.game <- function(){
   #' made. This will be useful to validate subsequent guesses to ensure the
   #' user does not guess the same thing multiple times.
   already.guessed <- c()
-  
+
+  # SW: I appreciate the very descriptive and easy to understand set of rules at the beginning of the game for the user!!
+  # SW: This section of the code runs well. Good use of the strsplit() to split the mystery word. 
+
   # BEGINNING OF SECTION C: User guessing & guess validation
   
   # While loop while guessing is allowed - under guess cap and visual != word:
@@ -328,4 +354,22 @@ while(quit.game != TRUE){
 cat("Thanks for playing!\n", "Terminating Game....\n", sep="")
 
 
-# Comments: 
+# SW: Final Code Review Comments ####
+
+# SW: Required functionality: 
+# SW: Overall, this code was easy to follow along with, ran well without any errors, 
+# SW: was clearly explained, and included ALL required elements. 
+# SW: This code included a dictionary of words in a txt. file and the word list was effectively read using read.csv(). 
+# SW: A random element from the word list was chosen through the correct use of sample(). 
+# SW: The length of the secret word was provided through the use of nchar(). 
+# SW: Great work initializing all of the variables and effectively providing number of wrong guesses and tries. 
+# SW: I like the added features of determining if a character is a letter (as seen in the helper functions). 
+# SW: The code effectively determined if input was in the mystery word. 
+# SW: It accurately provides a visual progress of game and the remaining number of guesses and wrong tries. 
+# SW: In general, I really liked how you split your code into sections and included in-depth comments for each line of code.
+# SW: Your while loop seems to working well and provided the expected outputs. 
+# SW: By seperating your while loop by comments explaining the purpose of each function and organizing your code into sections,
+# SW: it contributes to the overall readability of your code.
+# SW: Overall, your code worked perfectly, provided the outputs I was expecting, 
+# SW: was clear and easy to understand, with a consistent style guide used throughout. 
+# SW: Your game was a lot of fun to play! Excellent work!! 
