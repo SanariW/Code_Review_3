@@ -1,4 +1,6 @@
 # Assignment 3: Hangman Game
+# SW: CODE REVIEW by Sanari Wickramaratne (SW)
+# SW: Code review comments tagged with SW in the beginning 
 
 #' To run this game, please follow these instructions:
 #' 1) Ensure that the working directory is set correctly to "Assignment_3_Hangman"
